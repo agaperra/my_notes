@@ -1,16 +1,11 @@
 package com.agaperra.mynotes.ui.main
 
-import android.app.Application
-import android.content.Context
-import androidx.lifecycle.*
-import com.agaperra.mynotes.App
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.agaperra.mynotes.App.Companion.getNoteDao
 import com.agaperra.mynotes.interactor.string.StringInteractor
 import com.agaperra.mynotes.repository.NotesRepository
 import com.agaperra.mynotes.repository.NotesRepositoryImpl
-import com.agaperra.mynotes.response.NoteResponse
-import com.agaperra.mynotes.room.NoteDatabase
-import com.agaperra.mynotes.room.data.Note
 import com.agaperra.mynotes.utils.AppState
 
 class MainViewModel(
