@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.agaperra.mynotes">
 
     <application
+        android:name=".App"
         android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_description"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="m"
         android:theme="@style/Theme.MyNotes.NoActionBar">
         <activity android:name=".MainActivity">
             <intent-filter>
