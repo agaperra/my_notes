@@ -6,22 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.agaperra.mynotes.ui.add.AddNoteFragment
 import com.agaperra.mynotes.R
 import com.agaperra.mynotes.adapter.NoteAdapter
 import com.agaperra.mynotes.databinding.MainFragmentBinding
+import com.agaperra.mynotes.helper.SimpleItemTouchHelperCallback
 import com.agaperra.mynotes.interactor.string.StringInteractorImpl
 import com.agaperra.mynotes.listener.OnItemClickListener
-import com.agaperra.mynotes.repository.NotesRepositoryImpl
 import com.agaperra.mynotes.response.NoteResponse
-import com.agaperra.mynotes.room.data.Note
 import com.agaperra.mynotes.utils.AppState
 
 
@@ -82,6 +77,9 @@ class MainFragment : Fragment() {
             noteAdapter.notifyDataSetChanged()
         })
         mainViewModel.getAllNotesList()
+        val callback: ItemTouchHelper.Callback = SimpleItemTouchHelperCallback(noteAdapter)
+        val touchHelper = ItemTouchHelper(callback)
+        touchHelper.attachToRecyclerView(binding.noteRecycler)
         binding.viewModel = mainViewModel
     }
 
@@ -89,7 +87,7 @@ class MainFragment : Fragment() {
         when (appState) {
             is AppState.Success -> {
                 binding.noteRecycler.visibility = View.VISIBLE
-                noteAdapter.setData(appState.noteData)
+                noteAdapter.setData(appState.noteData as ArrayList<NoteResponse>)
             }
             is AppState.Loading -> {
                 binding.noteRecycler.visibility = View.GONE
@@ -100,6 +98,7 @@ class MainFragment : Fragment() {
             }
         }
     }
+
 
 
 }
