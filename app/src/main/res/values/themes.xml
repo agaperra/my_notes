@@ -22,7 +22,7 @@
 
     <style name="ToolbarTheme" parent="Widget.Design.AppBarLayout">
         <item name="fontFamily">@font/nevrada_neue</item>
-        <item name="android:textColor">@color/dark_greenish_grey</item>
+        <item name="android:textColor">@color/grey_umber</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
 
@@ -31,7 +31,7 @@
         <item name="android:textSize">20sp</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/dark_greenish_grey</item>
+        <item name="android:textColor">@color/grey_umber</item>
     </style>
 
     <style name="CardStyle" parent="CardView.Light">
@@ -41,8 +41,14 @@
 
     <style name="CardText">
         <item name="android:fontFamily">@font/sfprodisplay_thin</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/dark_greenish_grey</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/grey_umber</item>
+    </style>
+
+    <style name="CardDate">
+        <item name="android:fontFamily">@font/sfprodisplay_thin</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">#B5302A27</item>
     </style>
     <style name="_FloatingActionButton" parent="Widget.Design.FloatingActionButton">
         <item name="android:backgroundTint">@color/silver_grey</item>
