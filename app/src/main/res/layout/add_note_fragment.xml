@@ -39,7 +39,7 @@
                     android:fontFamily="@font/nevrada_neue"
                     android:textColor="@color/grey_umber"
                     android:textCursorDrawable="@null"
-                    android:textSize="20sp"
+                    android:textSize="30sp"
                     android:padding="5dp"
                     android:ellipsize="end"
                     android:maxLines="1"

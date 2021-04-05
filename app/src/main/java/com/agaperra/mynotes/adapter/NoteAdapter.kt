@@ -1,10 +1,14 @@
 package com.agaperra.mynotes.adapter
 
+import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.agaperra.mynotes.App
 import com.agaperra.mynotes.R
@@ -15,7 +19,7 @@ import com.agaperra.mynotes.repository.NotesRepository
 import com.agaperra.mynotes.repository.NotesRepositoryImpl
 import com.agaperra.mynotes.response.NoteResponse
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 class NoteAdapter(var onItemClickListener: OnItemClickListener) :
     RecyclerView.Adapter<NoteAdapter.NoteViewHolder>(), ItemTouchHelperAdapter {
@@ -23,6 +27,8 @@ class NoteAdapter(var onItemClickListener: OnItemClickListener) :
     private var notes = arrayListOf<NoteResponse>()
     private val notesRepository: NotesRepository =
         NotesRepositoryImpl(App.getNoteDao())
+    private lateinit var cntxt: Context
+    private lateinit var recycler: RecyclerView
 
     fun setData(data: ArrayList<NoteResponse>) {
         this.notes = data
@@ -44,11 +50,9 @@ class NoteAdapter(var onItemClickListener: OnItemClickListener) :
         }
 
         override fun onItemSelected() {
-            itemView.setBackgroundColor(Color.LTGRAY)
         }
 
         override fun onItemClear() {
-            itemView.setBackgroundColor(0)
         }
     }
 
@@ -63,6 +67,13 @@ class NoteAdapter(var onItemClickListener: OnItemClickListener) :
 
     override fun getItemCount() = notes.size
 
+    fun setContext(context: Context){
+        cntxt = context
+    }
+
+    fun setRecycler(recyclerView: RecyclerView){
+        recycler=recyclerView
+    }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
         if (fromPosition < toPosition) {
@@ -79,10 +90,24 @@ class NoteAdapter(var onItemClickListener: OnItemClickListener) :
     }
 
     override fun onItemDismiss(position: Int) {
-        val temp =notes[position].date
-        notes.removeAt(position)
-        notifyItemRemoved(position)
-        dropNote(temp)
+        val builder = AlertDialog.Builder(cntxt)
+        builder.setTitle(cntxt.resources.getString(R.string.delete_note))
+            .setPositiveButton(
+                cntxt.resources.getString(R.string.yes)
+            ) { _: DialogInterface?, _: Int ->
+                val temp =notes[position].date
+                notes.removeAt(position)
+                notifyItemRemoved(position)
+                dropNote(temp)
+            }
+            .setNegativeButton(
+                cntxt.resources.getString(R.string.chancel)
+            ) { dialog: DialogInterface, _: Int ->
+                notifyDataSetChanged()
+                dialog.cancel() }
+            .show()
+
+
     }
 
     private fun dropNote(date: String) {

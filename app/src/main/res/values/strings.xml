@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Notes</string>
     <string name="add_note">AddNote</string>
+    <string name="delete_note">Do you really want to delete this note?</string>
+    <string name="note_added">Note saved</string>
+    <string name="yes">Yes</string>
+    <string name="chancel">Chancel</string>
 </resources>

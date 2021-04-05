@@ -76,8 +76,10 @@ class MainFragment : Fragment() {
             renderData(it)
             noteAdapter.notifyDataSetChanged()
         })
+        noteAdapter.setContext(requireContext())
+        noteAdapter.setRecycler(binding.noteRecycler)
         mainViewModel.getAllNotesList()
-        val callback: ItemTouchHelper.Callback = SimpleItemTouchHelperCallback(noteAdapter)
+        val callback: ItemTouchHelper.Callback = SimpleItemTouchHelperCallback(noteAdapter, requireContext())
         val touchHelper = ItemTouchHelper(callback)
         touchHelper.attachToRecyclerView(binding.noteRecycler)
         binding.viewModel = mainViewModel

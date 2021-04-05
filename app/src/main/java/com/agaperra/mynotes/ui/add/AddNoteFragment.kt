@@ -70,7 +70,7 @@ class AddNoteFragment : Fragment() {
                     binding.edittxtMultilines.text.toString()
 
                 )
-                Toast.makeText(context, "Note save", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context?.resources?.getString(R.string.note_added), Toast.LENGTH_SHORT).show()
                 view.findNavController().navigate(R.id.main_nav)
             }
         }
