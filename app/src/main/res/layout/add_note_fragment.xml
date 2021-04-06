@@ -63,7 +63,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/collapsing_toolbar">
 
-            <com.agaperra.mynotes.utils.LinedEditText
+            <com.agaperra.mynotes.util.LinedEditText
                 android:id="@+id/edittxt_multilines"
                 style="@style/CardText"
                 android:layout_width="match_parent"

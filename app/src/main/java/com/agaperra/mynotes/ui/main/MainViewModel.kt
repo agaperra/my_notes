@@ -6,7 +6,7 @@ import com.agaperra.mynotes.App.Companion.getNoteDao
 import com.agaperra.mynotes.interactor.string.StringInteractor
 import com.agaperra.mynotes.repository.NotesRepository
 import com.agaperra.mynotes.repository.NotesRepositoryImpl
-import com.agaperra.mynotes.utils.AppState
+import com.agaperra.mynotes.util.AppState
 
 class MainViewModel(
     val noteLiveData: MutableLiveData<AppState> = MutableLiveData(),

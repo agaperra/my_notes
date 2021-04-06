@@ -9,12 +9,8 @@ interface NoteDao {
     @Query("SELECT * FROM Note ORDER BY date desc")
     fun all(): List<Note>
 
-    @Query("SELECT * FROM Note ORDER BY date desc")
-    fun all1(): LiveData<List<Note>>
-
     @Query("SELECT * FROM Note WHERE date LIKE :date")
     fun getDataByHeader(date: String): Note
-
 
     @Query("DELETE FROM Note WHERE date LIKE :date")
     fun drop(date: String)

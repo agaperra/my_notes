@@ -1,10 +1,11 @@
-package com.agaperra.mynotes
+package com.agaperra.mynotes.activity
 
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
+import com.agaperra.mynotes.R
 import com.agaperra.mynotes.databinding.MainActivityBinding
 import com.agaperra.mynotes.ui.main.MainFragment
 import com.jaeger.library.StatusBarUtil

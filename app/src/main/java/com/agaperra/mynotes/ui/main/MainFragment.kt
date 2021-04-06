@@ -17,7 +17,7 @@ import com.agaperra.mynotes.helper.SimpleItemTouchHelperCallback
 import com.agaperra.mynotes.interactor.string.StringInteractorImpl
 import com.agaperra.mynotes.listener.OnItemClickListener
 import com.agaperra.mynotes.response.NoteResponse
-import com.agaperra.mynotes.utils.AppState
+import com.agaperra.mynotes.util.AppState
 
 
 class MainFragment : Fragment() {
