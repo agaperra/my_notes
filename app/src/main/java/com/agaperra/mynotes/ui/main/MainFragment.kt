@@ -2,8 +2,10 @@ package com.agaperra.mynotes.ui.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -22,10 +24,12 @@ import com.agaperra.mynotes.util.AppState
 
 class MainFragment : Fragment() {
 
+    private val data: String = ""
+
     private val noteAdapter by lazy {
         NoteAdapter(object : OnItemClickListener {
             override fun onItemClick(note: NoteResponse) {
-                val action = MainFragmentDirections.openAddNotesFragment(note.date)
+                val action = MainFragmentDirections.openAddNotesFragment(note.create_date)
                 requireView().findNavController().navigate(action)
             }
         })
@@ -35,9 +39,9 @@ class MainFragment : Fragment() {
     private lateinit var mainViewModel: MainViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
         mainViewModel = MainViewModel()
@@ -65,6 +69,23 @@ class MainFragment : Fragment() {
             binding.textView.visibility = View.VISIBLE
             false
         }
+
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return when (data.trim()) {
+                    "" -> false
+                    else -> {
+
+                        true
+                    }
+                }
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+
+                return true
+            }
+        })
         mainViewModel.getAllNotesList()
 
         binding.noteRecycler.apply {

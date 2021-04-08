@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -19,6 +20,7 @@ import com.agaperra.mynotes.databinding.AddNoteFragmentBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 class AddNoteFragment : Fragment() {
 
     private lateinit var binding: AddNoteFragmentBinding
@@ -26,12 +28,12 @@ class AddNoteFragment : Fragment() {
     private val args: AddNoteFragmentArgs by navArgs()
 
     @SuppressLint("SimpleDateFormat")
-    val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy-HH:mm:ss")
+    val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm")
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.add_note_fragment, container, false)
         addViewModel = AddNoteViewModel()
@@ -45,54 +47,76 @@ class AddNoteFragment : Fragment() {
 
     private fun doInitialization() {
 
+        binding.head.apply {
+            isFocusableInTouchMode
+            isFocusable = true
+            requestFocus()
+            highlightColor = ContextCompat.getColor(context, R.color.silver_grey)
+            hideKeyboard(context, false)
+        }
+
         if (args.noteDate != "") {
             addViewModel.getDetails(args.noteDate)
-
             binding.head.setText(addViewModel.noteDetails.title, TextView.BufferType.EDITABLE)
+            binding.editDate.text = addViewModel.noteDetails.edit_date
             binding.edittxtMultilines.setText(
-                addViewModel.noteDetails.note,
-                TextView.BufferType.EDITABLE
+                    addViewModel.noteDetails.note,
+                    TextView.BufferType.EDITABLE
             )
         }
 
         binding.floatingDone.setOnClickListener { view: View ->
-            hideKeyboard(requireContext())
+            hideKeyboard(requireContext(), true)
             if (binding.head.text.trim() == "") {
                 view.findNavController().navigate(R.id.main_nav)
             } else {
                 if (args.noteDate != "") {
-                    dropNoteFromDB(args.noteDate)
+                    updateNote(binding.head.text.trim().toString(),
+                            args.noteDate,
+                            simpleDateFormat.format(Date()),
+                            binding.edittxtMultilines.text.toString()
+                    )
+                } else {
+                    saveNote(binding.head.text.trim().toString(),
+                            simpleDateFormat.format(Date()),
+                            simpleDateFormat.format(Date()),
+                            binding.edittxtMultilines.text.toString()
+                    )
                 }
-                saveNote(
-                    binding.head.text.trim().toString(),
-                    simpleDateFormat.format(Date()),
-                    binding.edittxtMultilines.text.toString()
-
-                )
-                Toast.makeText(context, context?.resources?.getString(R.string.note_added), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                        context,
+                        context?.resources?.getString(R.string.note_added),
+                        Toast.LENGTH_SHORT
+                ).show()
                 view.findNavController().navigate(R.id.main_nav)
             }
         }
     }
 
 
-    private fun saveNote(title: String, date: String, note: String) {
-        addViewModel.saveNoteToDB(title, date, note)
+    private fun saveNote(title: String, create_date: String, edit_date: String, note: String) {
+        addViewModel.saveNoteToDB(title, create_date, edit_date, note)
 
     }
 
-    private fun dropNoteFromDB(date: String) {
-        addViewModel.dropNote(date)
+    private fun updateNote(title: String, create_date: String, edit_date: String, note: String) {
+        addViewModel.updateNote(title, create_date, edit_date, note)
     }
 
-    private fun hideKeyboard(ctx: Context) {
-        val inputManager = ctx
-            .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-
-
-        // check if no view has focus:
-        val v = (ctx as Activity).currentFocus ?: return
-        inputManager.hideSoftInputFromWindow(v.windowToken, 0)
+    private fun hideKeyboard(ctx: Context, flag: Boolean) {
+        if (flag) {
+            //скрыть
+            val inputManager = ctx
+                    .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val v = (ctx as Activity).currentFocus ?: return
+            inputManager.hideSoftInputFromWindow(v.windowToken, 0)
+        } else {
+            //показать
+            val inputManager = ctx
+                    .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val v = (ctx as Activity).currentFocus ?: return
+            inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+        }
     }
 
 }

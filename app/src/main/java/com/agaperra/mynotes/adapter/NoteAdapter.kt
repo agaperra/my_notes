@@ -41,7 +41,7 @@ class NoteAdapter(var onItemClickListener: OnItemClickListener) :
 
         fun bind(note: NoteResponse) {
             itemView.findViewById<TextView>(R.id.header).text = note.title
-            itemView.findViewById<TextView>(R.id.date).text = note.date
+            itemView.findViewById<TextView>(R.id.date).text = note.create_date
             itemView.findViewById<TextView>(R.id.text).text = note.note
 
             itemView.setOnClickListener {
@@ -95,7 +95,7 @@ class NoteAdapter(var onItemClickListener: OnItemClickListener) :
             .setPositiveButton(
                 cntxt.resources.getString(R.string.yes)
             ) { _: DialogInterface?, _: Int ->
-                val temp =notes[position].date
+                val temp =notes[position].create_date
                 notes.removeAt(position)
                 notifyItemRemoved(position)
                 dropNote(temp)

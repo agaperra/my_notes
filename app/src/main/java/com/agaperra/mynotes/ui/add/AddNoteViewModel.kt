@@ -12,8 +12,8 @@ class AddNoteViewModel(
 
     lateinit var noteDetails: NoteResponse
 
-    fun saveNoteToDB(title: String, date: String, note: String) {
-        noteRepository.saveEntity(title, date, note)
+    fun saveNoteToDB(title: String, create_date: String, edit_date: String, note: String) {
+        noteRepository.saveEntity(title, create_date, edit_date, note)
     }
 
     fun getDetails(date: String) {
@@ -23,4 +23,9 @@ class AddNoteViewModel(
     fun dropNote(date: String) {
         noteRepository.dropNote(date)
     }
+
+    fun updateNote(title: String, create_date: String, edit_date: String, note: String){
+        noteRepository.updateNote(title, create_date, edit_date, note)
+    }
+
 }

@@ -10,8 +10,8 @@ class NotesRepositoryImpl(private val localDataSource: NoteDao) : NotesRepositor
         return convertNoteEntityToNote(localDataSource.all())
     }
 
-    override fun saveEntity(title: String, date: String, note: String) {
-        localDataSource.insert(convertNoteToEntity(title, date, note))
+    override fun saveEntity(title: String, create_date: String, edit_date: String, note: String) {
+        localDataSource.insert(convertNoteToEntity(title, create_date, edit_date, note))
     }
 
     override fun readNote(date: String): NoteResponse {
@@ -22,21 +22,27 @@ class NotesRepositoryImpl(private val localDataSource: NoteDao) : NotesRepositor
         localDataSource.drop(date)
     }
 
+    override fun updateNote(title: String, create_date: String, edit_date: String, note: String) {
+        localDataSource.update(convertNoteToEntity(title, create_date, edit_date, note))
+    }
+
     private fun convertNoteEntityToNote(entityList: List<Note>): List<NoteResponse> =
-        entityList.map {
-            NoteResponse(
-                it.title,
-                it.date,
-                it.note
-            )
-        }
+            entityList.map {
+                NoteResponse(
+                        it.title,
+                        it.create_date,
+                        it.edit_date,
+                        it.note
+                )
+            }
 
     private fun convertNoteToNoteResponse(note: Note): NoteResponse =
-        NoteResponse(note.title, note.date, note.note)
+            NoteResponse(note.title, note.create_date, note.edit_date, note.note)
 
-    private fun convertNoteToEntity(title: String, date: String, note: String): Note = Note(
-        title,
-        date,
-        note
+    private fun convertNoteToEntity(title: String, create_date: String, edit_date: String, note: String): Note = Note(
+            title,
+            create_date,
+            edit_date,
+            note
     )
 }
