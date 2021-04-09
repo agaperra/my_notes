@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <color name="silver_grey">#7A928C</color>
     <color name="grey_umber">#302A27</color>
-    <color name="dark_greenish_grey">#4E4B44</color>
+    <color name="dark_greenish_grey" tools:keep="@color/dark_greenish_grey">#4E4B44</color>
 
     <color name="light_greenish_white">#ADA192</color>
     <color name="forest_wolf_first">#D5CFC7</color>

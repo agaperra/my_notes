@@ -47,7 +47,10 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:autofillHints=""
+                    android:inputType="text"
+                    tools:ignore="LabelFor" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -61,7 +64,8 @@
             android:layout_marginEnd="10dp"
             android:gravity="right"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/collapsing_toolbar" />
+            app:layout_constraintTop_toBottomOf="@+id/collapsing_toolbar"
+            tools:ignore="RtlHardcoded" />
 
         <LinearLayout
             android:layout_width="match_parent"
