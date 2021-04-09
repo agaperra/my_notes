@@ -1,47 +1,48 @@
 package com.agaperra.mynotes.adapter
 
+import android.app.Application
 import android.content.Context
 import android.content.DialogInterface
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
-import com.agaperra.mynotes.App
+
 import com.agaperra.mynotes.R
+import com.agaperra.mynotes.data.Note
+import com.agaperra.mynotes.data.NoteDatabase
+import com.agaperra.mynotes.data.NoteRepository
 import com.agaperra.mynotes.helper.ItemTouchHelperAdapter
 import com.agaperra.mynotes.helper.ItemTouchHelperViewHolder
 import com.agaperra.mynotes.listener.OnItemClickListener
-import com.agaperra.mynotes.repository.NotesRepository
-import com.agaperra.mynotes.repository.NotesRepositoryImpl
-import com.agaperra.mynotes.response.NoteResponse
+import com.agaperra.mynotes.ui.main.MainViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 
-class NoteAdapter(var onItemClickListener: OnItemClickListener) :
-    RecyclerView.Adapter<NoteAdapter.NoteViewHolder>(), ItemTouchHelperAdapter {
+class NoteAdapter(var onItemClickListener: OnItemClickListener, application: Application, private val viewModel: MainViewModel, val context: Context) :
+        RecyclerView.Adapter<NoteAdapter.NoteViewHolder>(), ItemTouchHelperAdapter {
 
-    private var notes = arrayListOf<NoteResponse>()
-    private val notesRepository: NotesRepository =
-        NotesRepositoryImpl(App.getNoteDao())
-    private lateinit var cntxt: Context
+    private var notes = arrayListOf<Note>()
     private lateinit var recycler: RecyclerView
+    private val repository: NoteRepository
 
-    fun setData(data: ArrayList<NoteResponse>) {
-        this.notes = data
-        notifyDataSetChanged()
+    init {
+        val noteDao = NoteDatabase.getDatabase(application).noteDao()
+        repository = NoteRepository(noteDao)
     }
 
 
     inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-        ItemTouchHelperViewHolder {
+            ItemTouchHelperViewHolder {
 
-        fun bind(note: NoteResponse) {
+        fun bind(note: Note) {
             itemView.findViewById<TextView>(R.id.header).text = note.title
-            itemView.findViewById<TextView>(R.id.date).text = note.date
+            itemView.findViewById<TextView>(R.id.date).text = note.create_date
             itemView.findViewById<TextView>(R.id.text).text = note.note
 
             itemView.setOnClickListener {
@@ -57,8 +58,8 @@ class NoteAdapter(var onItemClickListener: OnItemClickListener) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = NoteViewHolder(
-        LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_note, parent, false)
+            LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_note, parent, false)
     )
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
@@ -67,9 +68,6 @@ class NoteAdapter(var onItemClickListener: OnItemClickListener) :
 
     override fun getItemCount() = notes.size
 
-    fun setContext(context: Context){
-        cntxt = context
-    }
 
     fun setRecycler(recyclerView: RecyclerView){
         recycler=recyclerView
@@ -90,28 +88,36 @@ class NoteAdapter(var onItemClickListener: OnItemClickListener) :
     }
 
     override fun onItemDismiss(position: Int) {
-        val builder = AlertDialog.Builder(cntxt)
-        builder.setTitle(cntxt.resources.getString(R.string.delete_note))
-            .setPositiveButton(
-                cntxt.resources.getString(R.string.yes)
-            ) { _: DialogInterface?, _: Int ->
-                val temp =notes[position].date
-                notes.removeAt(position)
-                notifyItemRemoved(position)
-                dropNote(temp)
-            }
-            .setNegativeButton(
-                cntxt.resources.getString(R.string.chancel)
-            ) { dialog: DialogInterface, _: Int ->
-                notifyDataSetChanged()
-                dialog.cancel() }
-            .show()
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle(context.resources.getString(R.string.delete_note))
+                .setPositiveButton(
+                        context.resources.getString(R.string.yes)
+                ) { _: DialogInterface?, _: Int ->
+                    val temp =notes[position].create_date
+                    notes.removeAt(position)
+                    notifyItemRemoved(position)
+                    dropNote(temp, viewModel =viewModel )
+                }
+                .setNegativeButton(
+                        context.resources.getString(R.string.chancel)
+                ) { dialog: DialogInterface, _: Int ->
+                    notifyDataSetChanged()
+                    dialog.cancel() }
+                .show()
 
 
     }
 
-    private fun dropNote(date: String) {
-        notesRepository.dropNote(date)
+    private fun dropNote(date: String, viewModel: MainViewModel) {
+        viewModel.viewModelScope.launch(Dispatchers.IO) {
+            repository.dropNote(date)
+        }
     }
+
+    fun addItems(note: List<Note>) = notes.addAll(note)
+
+    fun clearItems() = notes.clear()
+
 
 }
+

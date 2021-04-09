@@ -1,7 +1,7 @@
 package com.agaperra.mynotes.listener
 
-import com.agaperra.mynotes.response.NoteResponse
+import com.agaperra.mynotes.data.Note
 
 interface OnItemClickListener {
-    fun onItemClick(note: NoteResponse)
+    fun onItemClick(note: Note)
 }

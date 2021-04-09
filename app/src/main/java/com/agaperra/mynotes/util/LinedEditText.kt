@@ -1,4 +1,4 @@
-package com.agaperra.mynotes.utils
+package com.agaperra.mynotes.util
 
 import android.content.Context
 import android.graphics.Canvas

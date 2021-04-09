@@ -1,32 +1,28 @@
 package com.agaperra.mynotes.ui.main
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.agaperra.mynotes.App.Companion.getNoteDao
+import android.app.Application
+import androidx.lifecycle.*
+import com.agaperra.mynotes.data.Note
+import com.agaperra.mynotes.data.NoteDatabase
+import com.agaperra.mynotes.data.NoteRepository
 import com.agaperra.mynotes.interactor.string.StringInteractor
-import com.agaperra.mynotes.repository.NotesRepository
-import com.agaperra.mynotes.repository.NotesRepositoryImpl
-import com.agaperra.mynotes.utils.AppState
 
-class MainViewModel(
-    val noteLiveData: MutableLiveData<AppState> = MutableLiveData(),
-    private val notesRepository: NotesRepository = NotesRepositoryImpl(getNoteDao()),
-) : ViewModel() {
+
+class MainViewModel(application: Application, private val stringInteractor: StringInteractor) : AndroidViewModel(application) {
+
+     val readAllNote: LiveData<List<Note>>
+    private val repository: NoteRepository
     val liveData = MutableLiveData<String>()
-    lateinit var strInt: StringInteractor
 
-    fun setInteractor(stringInteractor: StringInteractor) {
-        strInt = stringInteractor
+    init {
+        setText()
+        val noteDao = NoteDatabase.getDatabase(application).noteDao()
+        repository = NoteRepository(noteDao)
+        readAllNote = repository.readAllNotes
     }
 
-    fun setText() {
-        liveData.value = strInt.appName
+    private fun setText() {
+        liveData.value = stringInteractor.appName
     }
-
-    fun getAllNotesList() {
-        noteLiveData.value = AppState.Loading
-        noteLiveData.value = AppState.Success(notesRepository.readNotes())
-    }
-
 
 }
