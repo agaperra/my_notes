@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.agaperra.mynotes.R
+import com.agaperra.mynotes.data.Note
 import com.agaperra.mynotes.databinding.AddNoteFragmentBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -26,9 +27,10 @@ class AddNoteFragment : Fragment() {
     private lateinit var binding: AddNoteFragmentBinding
     private lateinit var addViewModel: AddNoteViewModel
     private val args: AddNoteFragmentArgs by navArgs()
+    private lateinit var note: Note
 
     @SuppressLint("SimpleDateFormat")
-    val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm")
+    val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -36,7 +38,7 @@ class AddNoteFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.add_note_fragment, container, false)
-        addViewModel = AddNoteViewModel()
+        addViewModel = AddNoteViewModel(requireActivity().application)
         return binding.root
     }
 
@@ -56,13 +58,16 @@ class AddNoteFragment : Fragment() {
         }
 
         if (args.noteDate != "") {
-            addViewModel.getDetails(args.noteDate)
-            binding.head.setText(addViewModel.noteDetails.title, TextView.BufferType.EDITABLE)
-            binding.editDate.text = addViewModel.noteDetails.edit_date
-            binding.edittxtMultilines.setText(
-                    addViewModel.noteDetails.note,
-                    TextView.BufferType.EDITABLE
-            )
+            addViewModel.getDetails(args.noteDate).observe(viewLifecycleOwner, {
+                it?.let {
+                    binding.head.setText(it.title, TextView.BufferType.EDITABLE)
+                    binding.editDate.text = it.edit_date
+                    binding.edittxtMultilines.setText(
+                            it.note,
+                            TextView.BufferType.EDITABLE
+                    )
+                }
+            })
         }
 
         binding.floatingDone.setOnClickListener { view: View ->
@@ -114,7 +119,7 @@ class AddNoteFragment : Fragment() {
             //показать
             val inputManager = ctx
                     .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            val v = (ctx as Activity).currentFocus ?: return
+            (ctx as Activity).currentFocus ?: return
             inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
         }
     }

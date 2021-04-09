@@ -1,31 +1,36 @@
 package com.agaperra.mynotes.ui.add
 
-import androidx.lifecycle.ViewModel
-import com.agaperra.mynotes.App
-import com.agaperra.mynotes.repository.NotesRepository
-import com.agaperra.mynotes.repository.NotesRepositoryImpl
-import com.agaperra.mynotes.response.NoteResponse
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import com.agaperra.mynotes.data.Note
+import com.agaperra.mynotes.data.NoteDatabase
+import com.agaperra.mynotes.data.NoteRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class AddNoteViewModel(
-    private val noteRepository: NotesRepository = NotesRepositoryImpl(App.getNoteDao())
-) : ViewModel() {
+class AddNoteViewModel(application: Application) : AndroidViewModel(application) {
 
-    lateinit var noteDetails: NoteResponse
+    private val repository: NoteRepository
+
+    init {
+        val noteDao = NoteDatabase.getDatabase(application).noteDao()
+        repository = NoteRepository(noteDao)
+    }
+
+    fun getDetails(date: String)= repository.getNoteByDate(date)
 
     fun saveNoteToDB(title: String, create_date: String, edit_date: String, note: String) {
-        noteRepository.saveEntity(title, create_date, edit_date, note)
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insertNote(Note(title, create_date, edit_date, note))
+        }
     }
 
-    fun getDetails(date: String) {
-        noteDetails = noteRepository.readNote(date)
+    fun updateNote(title: String, create_date: String, edit_date: String, note: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateNote(Note(title, create_date, edit_date, note))
+        }
     }
 
-    fun dropNote(date: String) {
-        noteRepository.dropNote(date)
-    }
-
-    fun updateNote(title: String, create_date: String, edit_date: String, note: String){
-        noteRepository.updateNote(title, create_date, edit_date, note)
-    }
 
 }

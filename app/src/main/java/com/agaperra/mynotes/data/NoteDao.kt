@@ -1,16 +1,14 @@
-package com.agaperra.mynotes.room.dao
+package com.agaperra.mynotes.data
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.agaperra.mynotes.room.data.Note
-
 @Dao
 interface NoteDao {
     @Query("SELECT * FROM Note ORDER BY create_date desc")
-    fun all(): List<Note>
+    fun all(): LiveData<List<Note>>
 
     @Query("SELECT * FROM Note WHERE create_date LIKE :date")
-    fun getDataByHeader(date: String): Note
+    fun getDataByCreateDate(date: String):  LiveData<Note>
 
     @Query("DELETE FROM Note WHERE create_date LIKE :date")
     fun drop(date: String)
@@ -21,6 +19,4 @@ interface NoteDao {
     @Update
     fun update(entity: Note)
 
-    @Delete
-    fun delete(entity: Note)
 }

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.agaperra.mynotes">
+    package="com.agaperra.mynotes" >
 
     <application
-        android:name=".App"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_description"
         android:icon="@mipmap/ic_launcher"
@@ -13,16 +12,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyNotes.NoActionBar"
         android:usesCleartextTraffic="true"
-        tools:targetApi="m">
-        <activity android:name=".activity.SplashActivity"
-            android:theme="@style/SplashTheme">
+        tools:targetApi="m" >
+        <activity
+            android:name=".activity.SplashActivity"
+            android:theme="@style/SplashTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".activity.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
