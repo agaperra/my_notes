@@ -15,7 +15,7 @@
         tools:targetApi="m" >
         <activity
             android:name=".activity.SplashActivity"
-            android:theme="@style/SplashTheme" >
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

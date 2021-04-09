@@ -3,6 +3,7 @@ package com.agaperra.mynotes.ui.add
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,11 +19,14 @@ import androidx.navigation.fragment.navArgs
 import com.agaperra.mynotes.R
 import com.agaperra.mynotes.data.Note
 import com.agaperra.mynotes.databinding.AddNoteFragmentBinding
+import com.jaredrummler.android.colorpicker.ColorPickerDialog
+import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
+import com.jaredrummler.android.colorpicker.ColorShape
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class AddNoteFragment : Fragment() {
+class AddNoteFragment : Fragment(){
 
     private lateinit var binding: AddNoteFragmentBinding
     private lateinit var addViewModel: AddNoteViewModel
@@ -33,9 +37,9 @@ class AddNoteFragment : Fragment() {
     val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.add_note_fragment, container, false)
         addViewModel = AddNoteViewModel(requireActivity().application)
@@ -63,8 +67,8 @@ class AddNoteFragment : Fragment() {
                     binding.head.setText(it.title, TextView.BufferType.EDITABLE)
                     binding.editDate.text = it.edit_date
                     binding.edittxtMultilines.setText(
-                            it.note,
-                            TextView.BufferType.EDITABLE
+                        it.note,
+                        TextView.BufferType.EDITABLE
                     )
                 }
             })
@@ -76,26 +80,29 @@ class AddNoteFragment : Fragment() {
                 view.findNavController().navigate(R.id.main_nav)
             } else {
                 if (args.noteDate != "") {
-                    updateNote(binding.head.text.trim().toString(),
-                            args.noteDate,
-                            simpleDateFormat.format(Date()),
-                            binding.edittxtMultilines.text.toString()
+                    updateNote(
+                        binding.head.text.trim().toString(),
+                        args.noteDate,
+                        simpleDateFormat.format(Date()),
+                        binding.edittxtMultilines.text.toString()
                     )
                 } else {
-                    saveNote(binding.head.text.trim().toString(),
-                            simpleDateFormat.format(Date()),
-                            simpleDateFormat.format(Date()),
-                            binding.edittxtMultilines.text.toString()
+                    saveNote(
+                        binding.head.text.trim().toString(),
+                        simpleDateFormat.format(Date()),
+                        simpleDateFormat.format(Date()),
+                        binding.edittxtMultilines.text.toString()
                     )
                 }
                 Toast.makeText(
-                        context,
-                        context?.resources?.getString(R.string.note_added),
-                        Toast.LENGTH_SHORT
+                    context,
+                    context?.resources?.getString(R.string.note_added),
+                    Toast.LENGTH_SHORT
                 ).show()
                 view.findNavController().navigate(R.id.main_nav)
             }
         }
+
     }
 
 
@@ -123,5 +130,6 @@ class AddNoteFragment : Fragment() {
             inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
         }
     }
+
 
 }
