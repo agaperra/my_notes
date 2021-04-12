@@ -7,9 +7,6 @@ interface NoteDao {
     @Query("SELECT * FROM Note ORDER BY create_date desc")
     fun all(): LiveData<List<Note>>
 
-//    @Query("SELECT * FROM Note ORDER BY position desc")
-//    fun allPosition(): LiveData<List<Note>>
-
     @Query("SELECT * FROM Note WHERE create_date LIKE :date")
     fun getDataByCreateDate(date: String):  LiveData<Note>
 
