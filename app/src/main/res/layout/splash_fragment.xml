@@ -15,11 +15,12 @@
         tools:context=".ui.splash.SplashFragment">
 
         <TextView
+
             android:id="@+id/startText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="@font/nevrada_neue"
-            android:textSize="150sp"
+            android:textSize="100sp"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
