@@ -4,19 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="viewModel"
+            type="com.agaperra.mynotes.ui.splash.SplashViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.SplashActivity">
+        tools:context=".ui.splash.SplashFragment">
 
         <TextView
+            android:id="@+id/startText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="@font/nevrada_neue"
-            android:text="@string/app_name"
             android:textSize="150sp"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"

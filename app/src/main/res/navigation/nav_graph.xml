@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@+id/main_nav">
+    app:startDestination="@+id/splashFragment">
 
     <fragment
         android:id="@+id/main_nav"
@@ -26,6 +26,14 @@
             android:name="noteDate"
             app:argType="string"
             android:defaultValue=""/>
+    </fragment>
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.agaperra.mynotes.ui.splash.SplashFragment"
+        android:label="SplashFragment" >
+        <action
+            android:id="@+id/action_splashFragment_to_main_nav"
+            app:destination="@id/main_nav" />
     </fragment>
 
 </navigation>
