@@ -3,11 +3,11 @@ package com.agaperra.mynotes.ui.add
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
@@ -17,11 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.agaperra.mynotes.R
-import com.agaperra.mynotes.data.Note
 import com.agaperra.mynotes.databinding.AddNoteFragmentBinding
-import com.jaredrummler.android.colorpicker.ColorPickerDialog
-import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
-import com.jaredrummler.android.colorpicker.ColorShape
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -31,7 +27,6 @@ class AddNoteFragment : Fragment(){
     private lateinit var binding: AddNoteFragmentBinding
     private lateinit var addViewModel: AddNoteViewModel
     private val args: AddNoteFragmentArgs by navArgs()
-    private lateinit var note: Note
 
     @SuppressLint("SimpleDateFormat")
     val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
@@ -42,6 +37,7 @@ class AddNoteFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.add_note_fragment, container, false)
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         addViewModel = AddNoteViewModel(requireActivity().application)
         return binding.root
     }
@@ -85,6 +81,7 @@ class AddNoteFragment : Fragment(){
                         args.noteDate,
                         simpleDateFormat.format(Date()),
                         binding.edittxtMultilines.text.toString()
+
                     )
                 } else {
                     saveNote(

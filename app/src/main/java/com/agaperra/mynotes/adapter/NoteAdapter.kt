@@ -24,10 +24,10 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 
-class NoteAdapter(var onItemClickListener: OnItemClickListener, application: Application, private val viewModel: MainViewModel, val context: Context) :
+open class NoteAdapter(var onItemClickListener: OnItemClickListener, application: Application, private val viewModel: MainViewModel, val context: Context) :
         RecyclerView.Adapter<NoteAdapter.NoteViewHolder>(), ItemTouchHelperAdapter {
 
-    private var notes = arrayListOf<Note>()
+    open var notes = arrayListOf<Note>()
     private lateinit var recycler: RecyclerView
     private val repository: NoteRepository
 
@@ -44,6 +44,7 @@ class NoteAdapter(var onItemClickListener: OnItemClickListener, application: App
             itemView.findViewById<TextView>(R.id.header).text = note.title
             itemView.findViewById<TextView>(R.id.date).text = note.create_date.take(10)
             itemView.findViewById<TextView>(R.id.text).text = note.note
+
 
             itemView.setOnClickListener {
                 onItemClickListener.onItemClick(note)
@@ -63,6 +64,7 @@ class NoteAdapter(var onItemClickListener: OnItemClickListener, application: App
     )
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
+//        updateNote(notes[position].title, notes[position].create_date, notes[position].edit_date, notes[position].note, position, viewModel)
         holder.bind(notes[position])
     }
 
@@ -77,10 +79,12 @@ class NoteAdapter(var onItemClickListener: OnItemClickListener, application: App
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
                 Collections.swap(notes, i, i + 1)
+//                updateNote(notes[i].title, notes[i].create_date, notes[i].edit_date, notes[i].note, i+1, viewModel)
             }
         } else {
             for (i in fromPosition downTo toPosition + 1) {
                 Collections.swap(notes, i, i - 1)
+//                updateNote(notes[i].title, notes[i].create_date, notes[i].edit_date, notes[i].note, i-1, viewModel)
             }
         }
         notifyItemMoved(fromPosition, toPosition)
@@ -111,6 +115,12 @@ class NoteAdapter(var onItemClickListener: OnItemClickListener, application: App
     private fun dropNote(date: String, viewModel: MainViewModel) {
         viewModel.viewModelScope.launch(Dispatchers.IO) {
             repository.dropNote(date)
+        }
+    }
+
+    private fun updateNote(title: String, create_date: String, edit_date: String, note: String?,viewModel: MainViewModel){
+        viewModel.viewModelScope.launch(Dispatchers.IO) {
+            repository.updateNote(Note(title, create_date, edit_date, note))
         }
     }
 
