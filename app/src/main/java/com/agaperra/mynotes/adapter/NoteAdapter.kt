@@ -42,7 +42,7 @@ class NoteAdapter(var onItemClickListener: OnItemClickListener, application: App
 
         fun bind(note: Note) {
             itemView.findViewById<TextView>(R.id.header).text = note.title
-            itemView.findViewById<TextView>(R.id.date).text = note.create_date
+            itemView.findViewById<TextView>(R.id.date).text = note.create_date.take(10)
             itemView.findViewById<TextView>(R.id.text).text = note.note
 
             itemView.setOnClickListener {

@@ -9,9 +9,10 @@ import com.agaperra.mynotes.R
 import com.agaperra.mynotes.databinding.MainActivityBinding
 import com.agaperra.mynotes.ui.main.MainFragment
 import com.jaeger.library.StatusBarUtil
+import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(){
 
 
     private lateinit var binding: MainActivityBinding
@@ -42,4 +43,5 @@ class MainActivity : AppCompatActivity() {
         }
         return
     }
+
 }
