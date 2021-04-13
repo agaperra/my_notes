@@ -1,13 +1,8 @@
 package com.agaperra.mynotes.helper
 
-import android.app.Application
 import android.content.Context
-import android.content.DialogInterface
-import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.agaperra.mynotes.R
-import com.agaperra.mynotes.adapter.NoteAdapter
 
 class SimpleItemTouchHelperCallback(
     private val mAdapter: ItemTouchHelperAdapter,
@@ -36,7 +31,8 @@ class SimpleItemTouchHelperCallback(
         source: RecyclerView.ViewHolder,
         target: RecyclerView.ViewHolder
     ): Boolean {
-       // mAdapter.onItemMove(source.adapterPosition, target.adapterPosition)
+        mAdapter.onItemMove(source.adapterPosition, target.adapterPosition)
+
         return true
     }
 
@@ -45,11 +41,11 @@ class SimpleItemTouchHelperCallback(
     }
 
     override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
-//        if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
-//            val itemViewHolder = viewHolder as ItemTouchHelperViewHolder?
-//            itemViewHolder!!.onItemSelected()
-//        }
-//        super.onSelectedChanged(viewHolder, actionState)
+        if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
+            val itemViewHolder = viewHolder as ItemTouchHelperViewHolder?
+            itemViewHolder!!.onItemSelected()
+        }
+        super.onSelectedChanged(viewHolder, actionState)
     }
 
     override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {

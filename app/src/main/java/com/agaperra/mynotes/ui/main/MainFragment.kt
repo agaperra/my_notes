@@ -38,12 +38,16 @@ class MainFragment : Fragment() {
     private lateinit var mainViewModel: MainViewModel
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
-        mainViewModel = MainViewModel(requireActivity().application, StringInteractorImpl(requireContext()))
+        mainViewModel = MainViewModel(
+            requireActivity().application, StringInteractorImpl(
+                requireContext()
+            )
+        )
         return binding.root
     }
 
@@ -79,7 +83,6 @@ class MainFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-
                 return true
             }
         })
@@ -89,18 +92,22 @@ class MainFragment : Fragment() {
             layoutManager =
                 LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         }
-        mainViewModel.readAllNote.observe(viewLifecycleOwner,{
-           notes = it
+        mainViewModel.readAllNote.observe(viewLifecycleOwner, {
+            notes = it
             noteAdapter.clearItems()
             noteAdapter.addItems(notes)
             noteAdapter.notifyDataSetChanged()
         })
 
         noteAdapter.setRecycler(binding.noteRecycler)
-        val callback: ItemTouchHelper.Callback = SimpleItemTouchHelperCallback(noteAdapter, requireContext())
+        val callback: ItemTouchHelper.Callback = SimpleItemTouchHelperCallback(
+            noteAdapter,
+            requireContext()
+        )
         val touchHelper = ItemTouchHelper(callback)
         touchHelper.attachToRecyclerView(binding.noteRecycler)
         binding.viewModel = mainViewModel
     }
+
 
 }

@@ -58,6 +58,7 @@ open class NoteAdapter(var onItemClickListener: OnItemClickListener, application
         }
     }
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = NoteViewHolder(
             LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_note, parent, false)
@@ -76,16 +77,16 @@ open class NoteAdapter(var onItemClickListener: OnItemClickListener, application
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
-//        if (fromPosition < toPosition) {
-//            for (i in fromPosition until toPosition) {
-//                Collections.swap(notes, i, i + 1)
-//            }
-//        } else {
-//            for (i in fromPosition downTo toPosition + 1) {
-//                Collections.swap(notes, i, i - 1)
-//            }
-//        }
-//        notifyItemMoved(fromPosition, toPosition)
+        if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                Collections.swap(notes, i, i + 1)
+            }
+        } else {
+            for (i in fromPosition downTo toPosition + 1) {
+                Collections.swap(notes, i, i - 1)
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition)
         return true
     }
 
