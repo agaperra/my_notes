@@ -76,18 +76,16 @@ open class NoteAdapter(var onItemClickListener: OnItemClickListener, application
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
-        if (fromPosition < toPosition) {
-            for (i in fromPosition until toPosition) {
-                Collections.swap(notes, i, i + 1)
-//                updateNote(notes[i].title, notes[i].create_date, notes[i].edit_date, notes[i].note, i+1, viewModel)
-            }
-        } else {
-            for (i in fromPosition downTo toPosition + 1) {
-                Collections.swap(notes, i, i - 1)
-//                updateNote(notes[i].title, notes[i].create_date, notes[i].edit_date, notes[i].note, i-1, viewModel)
-            }
-        }
-        notifyItemMoved(fromPosition, toPosition)
+//        if (fromPosition < toPosition) {
+//            for (i in fromPosition until toPosition) {
+//                Collections.swap(notes, i, i + 1)
+//            }
+//        } else {
+//            for (i in fromPosition downTo toPosition + 1) {
+//                Collections.swap(notes, i, i - 1)
+//            }
+//        }
+//        notifyItemMoved(fromPosition, toPosition)
         return true
     }
 

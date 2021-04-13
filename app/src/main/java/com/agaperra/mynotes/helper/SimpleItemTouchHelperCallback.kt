@@ -36,8 +36,7 @@ class SimpleItemTouchHelperCallback(
         source: RecyclerView.ViewHolder,
         target: RecyclerView.ViewHolder
     ): Boolean {
-        mAdapter.onItemMove(source.adapterPosition, target.adapterPosition)
-
+       // mAdapter.onItemMove(source.adapterPosition, target.adapterPosition)
         return true
     }
 
@@ -46,11 +45,11 @@ class SimpleItemTouchHelperCallback(
     }
 
     override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
-        if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
-            val itemViewHolder = viewHolder as ItemTouchHelperViewHolder?
-            itemViewHolder!!.onItemSelected()
-        }
-        super.onSelectedChanged(viewHolder, actionState)
+//        if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
+//            val itemViewHolder = viewHolder as ItemTouchHelperViewHolder?
+//            itemViewHolder!!.onItemSelected()
+//        }
+//        super.onSelectedChanged(viewHolder, actionState)
     }
 
     override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
