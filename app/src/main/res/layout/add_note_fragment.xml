@@ -38,7 +38,7 @@
                     android:layout_margin="10dp"
                     android:background="@color/forest_wolf_first"
                     android:ellipsize="end"
-                    android:fontFamily="@font/nevrada_neue"
+                    android:fontFamily="@font/header_font"
                     android:maxLines="1"
                     android:padding="5dp"
                     android:scrollbars="horizontal"
