@@ -109,5 +109,4 @@ class MainFragment : Fragment() {
         binding.viewModel = mainViewModel
     }
 
-
 }

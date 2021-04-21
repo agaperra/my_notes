@@ -14,10 +14,15 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.agaperra.mynotes.R
+import com.agaperra.mynotes.adapter.NoteAdapter
 import com.agaperra.mynotes.databinding.AddNoteFragmentBinding
+import com.agaperra.mynotes.ui.main.MainViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -76,7 +81,8 @@ class AddNoteFragment : Fragment(){
                 view.findNavController().navigate(R.id.main_nav)
             } else {
                 if (args.noteDate != "") {
-                    updateNote(
+
+                    updateNote(getCount(addViewModel),
                         binding.head.text.trim().toString(),
                         args.noteDate,
                         simpleDateFormat.format(Date()),
@@ -84,12 +90,13 @@ class AddNoteFragment : Fragment(){
 
                     )
                 } else {
-                    saveNote(
+                    saveNote(getCount(addViewModel),
                         binding.head.text.trim().toString(),
                         simpleDateFormat.format(Date()),
                         simpleDateFormat.format(Date()),
                         binding.edittxtMultilines.text.toString()
                     )
+
                 }
                 Toast.makeText(
                     context,
@@ -102,14 +109,40 @@ class AddNoteFragment : Fragment(){
 
     }
 
+    private fun getCount(viewModel: AddNoteViewModel): Int {
+        var temp=0
+        viewModel.viewModelScope.launch(Dispatchers.IO) {
+            temp=viewModel.getCount()
+        }
+        return temp
+    }
 
-    private fun saveNote(title: String, create_date: String, edit_date: String, note: String) {
-        addViewModel.saveNoteToDB(title, create_date, edit_date, note)
+
+    private fun saveNote(
+        position: Int,
+        title: String,
+        create_date: String,
+        edit_date: String,
+        note: String
+    ) {
+        addViewModel.saveNoteToDB(position, title, create_date, edit_date, note)
 
     }
 
-    private fun updateNote(title: String, create_date: String, edit_date: String, note: String) {
-        addViewModel.updateNote(title, create_date, edit_date, note)
+    private fun updateNote(
+        position: Int,
+        title: String,
+        create_date: String,
+        edit_date: String,
+        note: String
+    ) {
+        addViewModel.updateNote(position, title, create_date, edit_date, note)
+    }
+
+    private fun updatePosition(position: Int, position_other: Int, viewModel: AddNoteViewModel){
+        viewModel.viewModelScope.launch(Dispatchers.IO) {
+            addViewModel.updatePosition(position, position_other)
+        }
     }
 
     private fun hideKeyboard(ctx: Context, flag: Boolean) {

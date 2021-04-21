@@ -5,7 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Note(
-        var title: String,
+        var position: Int,
+        var title: String?,
         @PrimaryKey
         var create_date: String,
         var edit_date: String,
