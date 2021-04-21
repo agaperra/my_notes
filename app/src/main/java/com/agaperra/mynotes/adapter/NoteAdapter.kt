@@ -58,13 +58,15 @@ open class NoteAdapter(var onItemClickListener: OnItemClickListener, application
         }
     }
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = NoteViewHolder(
             LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_note, parent, false)
+
     )
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
-//        updateNote(notes[position].title, notes[position].create_date, notes[position].edit_date, notes[position].note, position, viewModel)
+        //updateNote(position, notes[position].title, notes[position].create_date, notes[position].edit_date, notes[position].note,  viewModel)
         holder.bind(notes[position])
     }
 
@@ -79,12 +81,12 @@ open class NoteAdapter(var onItemClickListener: OnItemClickListener, application
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
                 Collections.swap(notes, i, i + 1)
-//                updateNote(notes[i].title, notes[i].create_date, notes[i].edit_date, notes[i].note, i+1, viewModel)
+               // updatePosition(i, i+1, viewModel)
             }
         } else {
             for (i in fromPosition downTo toPosition + 1) {
                 Collections.swap(notes, i, i - 1)
-//                updateNote(notes[i].title, notes[i].create_date, notes[i].edit_date, notes[i].note, i-1, viewModel)
+                //updatePosition(i, i-1, viewModel)
             }
         }
         notifyItemMoved(fromPosition, toPosition)
@@ -118,9 +120,23 @@ open class NoteAdapter(var onItemClickListener: OnItemClickListener, application
         }
     }
 
-    private fun updateNote(title: String, create_date: String, edit_date: String, note: String?,viewModel: MainViewModel){
+    private fun getCount(): Int {
+        var temp=0
         viewModel.viewModelScope.launch(Dispatchers.IO) {
-            repository.updateNote(Note(title, create_date, edit_date, note))
+            temp=repository.getCount()
+        }
+        return temp
+    }
+
+    private fun updatePosition(position: Int, position_other: Int, viewModel: MainViewModel){
+        viewModel.viewModelScope.launch(Dispatchers.IO) {
+            repository.updatePosition(position, position_other)
+        }
+    }
+
+    private fun updateNote(position: Int, title: String?, create_date: String, edit_date: String, note: String?, viewModel: MainViewModel){
+        viewModel.viewModelScope.launch(Dispatchers.IO) {
+            repository.updateNote(position, title, create_date, edit_date, note)
         }
     }
 

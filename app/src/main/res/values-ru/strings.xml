@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Заметки</string>
+    <string name="add_note">Добавить заметку</string>
+    <string name="delete_note">Вы действительно хотите удалить эту заметку?</string>
+    <string name="note_added">Заметка сохранена</string>
+    <string name="yes">Да</string>
+    <string name="chancel">Отмена</string>
+    <string name="bucket">Корзина</string>
+    <string name="title_activity_main">Главный экран</string>
+</resources>

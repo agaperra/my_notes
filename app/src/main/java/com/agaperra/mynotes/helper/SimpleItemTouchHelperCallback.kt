@@ -1,13 +1,8 @@
 package com.agaperra.mynotes.helper
 
-import android.app.Application
 import android.content.Context
-import android.content.DialogInterface
-import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.agaperra.mynotes.R
-import com.agaperra.mynotes.adapter.NoteAdapter
 
 class SimpleItemTouchHelperCallback(
     private val mAdapter: ItemTouchHelperAdapter,

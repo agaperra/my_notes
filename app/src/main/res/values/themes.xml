@@ -21,13 +21,13 @@
     </style>
 
     <style name="ToolbarTheme" parent="Widget.Design.AppBarLayout">
-        <item name="fontFamily">@font/nevrada_neue</item>
+        <item name="fontFamily">@font/header_font</item>
         <item name="android:textColor">@color/grey_umber</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
 
     <style name="Header">
-        <item name="fontFamily">@font/nevrada_neue</item>
+        <item name="fontFamily">@font/header_font</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textStyle">bold</item>
@@ -36,17 +36,17 @@
 
     <style name="CardStyle" parent="CardView.Light">
         <item name="android:background">@color/forest_wolf_first</item>
-        <item name="android:fontFamily">@font/sfprodisplay_thin</item>
+        <item name="android:fontFamily">@font/text_font</item>
     </style>
 
     <style name="CardText">
-        <item name="android:fontFamily">@font/sfprodisplay_thin</item>
+        <item name="android:fontFamily">@font/text_font</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/grey_umber</item>
     </style>
 
     <style name="CardDate">
-        <item name="android:fontFamily">@font/sfprodisplay_thin</item>
+        <item name="android:fontFamily">@font/text_font</item>
         <item name="android:textSize">15sp</item>
         <item name="android:textColor">#B5302A27</item>
     </style>
