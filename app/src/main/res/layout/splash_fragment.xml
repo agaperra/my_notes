@@ -6,13 +6,13 @@
     <data>
         <variable
             name="viewModel"
-            type="com.agaperra.mynotes.ui.splash.SplashViewModel" />
+            type="com.agaperra.mynotes.presentation.ui.splash.SplashViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.splash.SplashFragment">
+        tools:context=".presentation.ui.splash.SplashFragment">
 
         <TextView
 
@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="@font/header_font"
-            android:textSize="@dimen/_100ssp"
+            android:textSize="@dimen/_70ssp"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
