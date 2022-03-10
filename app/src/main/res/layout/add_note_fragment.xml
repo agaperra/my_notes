@@ -13,7 +13,7 @@
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.main.MainFragment">
+        tools:context=".presentation.ui.main.MainFragment">
 
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -87,7 +87,12 @@
                 android:gravity="left|top"
                 android:scrollbars="vertical"
                 android:textColor="@color/grey_umber"
-                android:textCursorDrawable="@null" />
+                android:textColorHighlight="@color/dark_greenish_grey"
+                android:textCursorDrawable="@null"
+                android:textSelectHandle="@color/dark_greenish_grey"
+                android:textSelectHandleLeft="@color/dark_greenish_grey"
+                android:textSelectHandleRight="@color/dark_greenish_grey"
+                tools:ignore="RtlHardcoded" />
 
         </RelativeLayout>
 

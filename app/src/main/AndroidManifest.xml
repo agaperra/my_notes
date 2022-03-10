@@ -14,7 +14,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m"
         android:windowSoftInputMode="adjustResize">
-        <activity android:name=".activity.MainActivity" >
+        <activity android:name=".MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
