@@ -5,49 +5,48 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.agaperra.mynotes.R
-import com.agaperra.mynotes.presentation.adapters.NoteAdapter
-import com.agaperra.mynotes.data.db.entity.Note
 import com.agaperra.mynotes.databinding.MainFragmentBinding
-import com.agaperra.mynotes.util.helper.SimpleItemTouchHelperCallback
-import com.agaperra.mynotes.presentation.interactor.StringInteractorImpl
+import com.agaperra.mynotes.domain.model.AppState
+import com.agaperra.mynotes.domain.model.NoteItem
+import com.agaperra.mynotes.presentation.adapters.NoteListAdapter
 import com.agaperra.mynotes.presentation.adapters.listeners.OnItemClickListener
+import com.agaperra.mynotes.util.helper.SimpleItemTouchHelperCallback
+import com.agaperra.mynotes.util.launchWhenStarted
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.onEach
 
+@ExperimentalCoroutinesApi
+@AndroidEntryPoint
+class MainFragment : Fragment(R.layout.main_fragment) {
 
-class MainFragment : Fragment() {
-
-    private val data: String = ""
-    private lateinit var notes: List<Note>
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     private val noteAdapter by lazy {
-        NoteAdapter(object : OnItemClickListener {
-            override fun onItemClick(note: Note) {
-                val action = MainFragmentDirections.openAddNotesFragment(note.create_date)
+        NoteListAdapter(object : OnItemClickListener {
+            override fun onItemClick(note: NoteItem) {
+                val action = MainFragmentDirections.openAddNotesFragment(note.edit_date)
                 requireView().findNavController().navigate(action)
             }
-        }, requireActivity().application, mainViewModel, requireContext())
+        }, mainViewModel, requireContext())
     }
 
-    private lateinit var binding: MainFragmentBinding
-    private lateinit var mainViewModel: MainViewModel
+    private var _binding: MainFragmentBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
-        mainViewModel = MainViewModel(
-            requireActivity().application, StringInteractorImpl(
-                requireContext()
-            )
-        )
+        _binding = MainFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -58,11 +57,14 @@ class MainFragment : Fragment() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun doInitialization() {
-        mainViewModel.liveData.observe(viewLifecycleOwner, { binding.textView.text = it })
+        mainViewModel.liveData.observe(viewLifecycleOwner) { binding.textView.text = it }
 
         binding.floating.setOnClickListener { view: View ->
             view.findNavController().navigate(R.id.add_nav)
         }
+        binding.noteRecycler.adapter = noteAdapter
+        startObserve(mainViewModel.readAllNote)
+
 //        binding.searchView.setOnSearchClickListener {
 //            binding.textView.visibility =
 //                View.GONE
@@ -88,26 +90,33 @@ class MainFragment : Fragment() {
 //            }
 //        })
 
-        binding.noteRecycler.apply {
-            adapter = noteAdapter
-            layoutManager =
-                LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        }
-        mainViewModel.readAllNote.observe(viewLifecycleOwner) {
-            notes = it
-            noteAdapter.clearItems()
-            noteAdapter.addItems(notes)
-            noteAdapter.notifyDataSetChanged()
-        }
 
-        noteAdapter.setRecycler(binding.noteRecycler)
         val callback: ItemTouchHelper.Callback = SimpleItemTouchHelperCallback(
             noteAdapter,
             requireContext()
         )
         val touchHelper = ItemTouchHelper(callback)
         touchHelper.attachToRecyclerView(binding.noteRecycler)
-        binding.viewModel = mainViewModel
+    }
+
+    private fun startObserve(contentSource: StateFlow<List<NoteItem>>) {
+
+        contentSource.onEach { result ->
+            setResult(result)
+        }.launchWhenStarted(lifecycleScope)
+    }
+
+    private fun setResult(result: List<NoteItem>) {
+
+        noteAdapter.notes = ArrayList(result)
+        noteAdapter.submitList(result)
+
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
 }

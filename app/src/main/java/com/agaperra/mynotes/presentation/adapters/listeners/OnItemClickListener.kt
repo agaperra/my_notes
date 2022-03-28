@@ -1,7 +1,7 @@
 package com.agaperra.mynotes.presentation.adapters.listeners
 
-import com.agaperra.mynotes.data.db.entity.Note
+import com.agaperra.mynotes.domain.model.NoteItem
 
 interface OnItemClickListener {
-    fun onItemClick(note: Note)
+    fun onItemClick(note: NoteItem)
 }
