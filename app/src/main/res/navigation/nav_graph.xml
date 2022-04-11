@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/main_nav"
-        android:name="com.agaperra.mynotes.ui.main.MainFragment"
+        android:name="com.agaperra.mynotes.presentation.ui.main.MainFragment"
         android:label="main_fragment"
         tools:layout="@layout/main_fragment" >
         <action
             android:id="@+id/openAddNotesFragment"
             app:destination="@id/add_nav"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_fade_exit" />
+            app:enterAnim="@animator/fragment_open_enter"
+            app:exitAnim="@animator/fragment_fade_exit" />
     </fragment>
 
     <fragment
         android:id="@+id/add_nav"
-        android:name="com.agaperra.mynotes.ui.add.AddNoteFragment"
+        android:name="com.agaperra.mynotes.presentation.ui.add.AddNoteFragment"
         android:label="add_fragment"
         tools:layout="@layout/add_note_fragment" >
         <argument
@@ -29,7 +29,7 @@
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.agaperra.mynotes.ui.splash.SplashFragment"
+        android:name="com.agaperra.mynotes.presentation.ui.splash.SplashFragment"
         android:label="SplashFragment"
         tools:layout="@layout/splash_fragment">
         <action
