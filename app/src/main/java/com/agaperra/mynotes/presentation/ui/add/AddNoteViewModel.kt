@@ -29,7 +29,6 @@ class AddNoteViewModel @Inject constructor(
     private val _detailsNote = MutableStateFlow<AppState<NoteItem>>(AppState.Loading)
     var detailsNote = _detailsNote.asStateFlow()
 
-    suspend fun getCount(): Int = repositoryImpl.getCount()
 
 
     fun getDetails(date: String) {
@@ -38,9 +37,10 @@ class AddNoteViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun saveNoteToDB(position:Int, title: String?, create_date: String, edit_date: String, note: String?) {
+    fun saveNoteToDB(title: String?, create_date: String, edit_date: String, note: String?) {
         viewModelScope.launch(Dispatchers.IO) {
-            repositoryImpl.insertNote(Note(position, title, create_date, edit_date, note))
+            val max = repositoryImpl.getMax() ?: 0
+            repositoryImpl.insertNote(Note(0,max + 1 ,title, create_date, edit_date, note))
         }
     }
 
@@ -49,12 +49,6 @@ class AddNoteViewModel @Inject constructor(
             repositoryImpl.updateNote(title, create_date, edit_date, note)
         }
     }
-
-//    fun updatePosition(position: Int, position_other: Int ){
-//        viewModelScope.launch(Dispatchers.IO) {
-//            repositoryImpl.updatePosition(position, position_other)
-//        }
-//    }
 
 
 }

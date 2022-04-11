@@ -8,7 +8,7 @@ import com.agaperra.mynotes.data.db.dao.NoteDao
 import com.agaperra.mynotes.data.db.entity.Note
 import com.agaperra.mynotes.data.db.migrations.Migrations
 
-@Database(entities = [Note::class], version = 9, exportSchema = false)
+@Database(entities = [Note::class], version = 12, exportSchema = false)
 abstract class NoteDatabase : RoomDatabase() {
     abstract fun noteDao(): NoteDao
 }

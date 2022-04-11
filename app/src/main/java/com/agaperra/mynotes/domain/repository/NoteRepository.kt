@@ -1,8 +1,6 @@
 package com.agaperra.mynotes.domain.repository
 
-import androidx.lifecycle.LiveData
 import com.agaperra.mynotes.data.db.entity.Note
-import com.agaperra.mynotes.domain.model.AppState
 import com.agaperra.mynotes.domain.model.NoteItem
 import kotlinx.coroutines.flow.Flow
 
@@ -18,5 +16,9 @@ interface NoteRepository {
 
     suspend fun updateNote(title: String?, create_date: String, edit_date: String, note: String?)
 
+    suspend fun updatePosition(position: Int, position_other: Int)
+
     suspend fun getCount(): Int
+
+    suspend fun getMax(): Int?
 }

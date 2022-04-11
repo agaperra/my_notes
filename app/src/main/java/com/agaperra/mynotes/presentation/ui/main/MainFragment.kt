@@ -12,7 +12,6 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.agaperra.mynotes.R
 import com.agaperra.mynotes.databinding.MainFragmentBinding
-import com.agaperra.mynotes.domain.model.AppState
 import com.agaperra.mynotes.domain.model.NoteItem
 import com.agaperra.mynotes.presentation.adapters.NoteListAdapter
 import com.agaperra.mynotes.presentation.adapters.listeners.OnItemClickListener
@@ -30,9 +29,9 @@ class MainFragment : Fragment(R.layout.main_fragment) {
     private val mainViewModel: MainViewModel by activityViewModels()
 
     private val noteAdapter by lazy {
-        NoteListAdapter(object : OnItemClickListener {
+        NoteListAdapter(mainViewModel.cases, object : OnItemClickListener {
             override fun onItemClick(note: NoteItem) {
-                val action = MainFragmentDirections.openAddNotesFragment(note.edit_date)
+                val action = MainFragmentDirections.openAddNotesFragment(note.create_date)
                 requireView().findNavController().navigate(action)
             }
         }, mainViewModel, requireContext())

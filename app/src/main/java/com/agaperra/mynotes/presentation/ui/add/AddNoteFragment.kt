@@ -23,9 +23,12 @@ import com.agaperra.mynotes.domain.model.AppState
 import com.agaperra.mynotes.domain.model.NoteItem
 import com.agaperra.mynotes.util.launchWhenStarted
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -89,7 +92,6 @@ class AddNoteFragment : Fragment(R.layout.add_note_fragment) {
                     )
                 } else {
                     saveNote(
-                        0,
                         binding.head.text.trim().toString(),
                         simpleDateFormat.format(Date()),
                         simpleDateFormat.format(Date()),
@@ -132,14 +134,6 @@ class AddNoteFragment : Fragment(R.layout.add_note_fragment) {
     }
 
 
-//    private fun getCount(viewModel: AddNoteViewModel): Int {
-//        var temp = 0
-//        viewModel.viewModelScope.launch(Dispatchers.IO) {
-//            temp = viewModel.getCount()
-//        }
-//        return temp
-//    }
-
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
@@ -147,13 +141,12 @@ class AddNoteFragment : Fragment(R.layout.add_note_fragment) {
 
 
     private fun saveNote(
-        position: Int,
         title: String,
         create_date: String,
         edit_date: String,
         note: String
     ) {
-        addViewModel.saveNoteToDB(position, title, create_date, edit_date, note)
+        addViewModel.saveNoteToDB(title, create_date, edit_date, note)
 
     }
 

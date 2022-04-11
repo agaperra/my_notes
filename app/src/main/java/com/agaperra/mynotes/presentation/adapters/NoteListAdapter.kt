@@ -1,30 +1,25 @@
 package com.agaperra.mynotes.presentation.adapters
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.content.Context
 import android.content.DialogInterface
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-
 import com.agaperra.mynotes.R
-import com.agaperra.mynotes.data.db.entity.Note
-import com.agaperra.mynotes.data.db.NoteDatabase
 import com.agaperra.mynotes.data.repository.NoteRepositoryImpl
 import com.agaperra.mynotes.databinding.ItemNoteBinding
 import com.agaperra.mynotes.domain.model.NoteItem
 import com.agaperra.mynotes.domain.use_case.NoteCases
 import com.agaperra.mynotes.presentation.adapters.diffutil.NotesDiffUtil
-import com.agaperra.mynotes.util.helper.ItemTouchHelperAdapter
-import com.agaperra.mynotes.util.helper.ItemTouchHelperViewHolder
 import com.agaperra.mynotes.presentation.adapters.listeners.OnItemClickListener
 import com.agaperra.mynotes.presentation.ui.main.MainViewModel
+import com.agaperra.mynotes.util.helper.ItemTouchHelperAdapter
+import com.agaperra.mynotes.util.helper.ItemTouchHelperViewHolder
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -32,7 +27,8 @@ import java.util.*
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class NoteListAdapter (
+class NoteListAdapter(
+    private val noteCases: NoteCases,
     var onItemClickListener: OnItemClickListener,
     private val viewModel: MainViewModel,
     val context: Context
@@ -44,13 +40,12 @@ class NoteListAdapter (
     @Inject
     lateinit var repositoryImpl: NoteRepositoryImpl
 
-    @Inject
-    lateinit var noteCases: NoteCases
 
     var notes = arrayListOf<NoteItem>()
 
     inner class NoteListViewHolder(private val binding: ItemNoteBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+        RecyclerView.ViewHolder(binding.root),
+        ItemTouchHelperViewHolder {
 
         fun bind(itemPosition: Int) {
 
@@ -63,6 +58,14 @@ class NoteListAdapter (
             itemView.setOnClickListener {
                 onItemClickListener.onItemClick(note)
             }
+
+        }
+
+        override fun onItemSelected() {
+
+        }
+
+        override fun onItemClear() {
 
         }
 
@@ -83,20 +86,27 @@ class NoteListAdapter (
         holder.bind(itemPosition = position)
 
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
                 Collections.swap(notes, i, i + 1)
-                // updatePosition(i, i+1, viewModel)
+
             }
         } else {
             for (i in fromPosition downTo toPosition + 1) {
                 Collections.swap(notes, i, i - 1)
-                //updatePosition(i, i-1, viewModel)
             }
         }
         notifyItemMoved(fromPosition, toPosition)
+        updatePosition(notes[fromPosition].position, notes[toPosition].position, viewModel)
         return true
+    }
+
+    private fun updatePosition(position: Int, position_other: Int, viewModel: MainViewModel) {
+        viewModel.viewModelScope.launch(Dispatchers.IO) {
+            noteCases.updatePosition(position, position_other)
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -109,7 +119,10 @@ class NoteListAdapter (
                 val temp = notes[position].create_date
                 notes.removeAt(position)
                 notifyItemRemoved(position)
-                //dropNote(temp)
+                CoroutineScope(Dispatchers.Main).launch {
+                    dropNote(temp)
+                }
+
             }
             .setNegativeButton(
                 context.resources.getString(R.string.chancel)
@@ -122,30 +135,29 @@ class NoteListAdapter (
 
     }
 
-    private suspend fun dropNote(date: String, viewModel: MainViewModel) {
+    private suspend fun dropNote(date: String) {
         noteCases.dropNote(date)
     }
 
-    private fun getCount(): Int {
-        var temp = 0
-        viewModel.viewModelScope.launch(Dispatchers.IO) {
-            temp = repositoryImpl.getCount()
-        }
-        return temp
-    }
-
-
-    private fun updateNote(
-        title: String?,
-        create_date: String,
-        edit_date: String,
-        note: String?,
-        viewModel: MainViewModel
-    ) {
+//    private fun getCount(): Int {
+//        var temp = 0
 //        viewModel.viewModelScope.launch(Dispatchers.IO) {
+//            temp = repositoryImpl.getCount()
+//        }
+//        return temp
+//    }
+
+
+//    private suspend fun updateNote(
+//        title: String?,
+//        create_date: String,
+//        edit_date: String,
+//        note: String?
+//    ) {
+//        CoroutineScope(Dispatchers.Main).launch {
 //            repositoryImpl.updateNote(title, create_date, edit_date, note)
 //        }
-    }
+//    }
 
 
 }

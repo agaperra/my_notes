@@ -25,6 +25,8 @@ class MainViewModel @Inject constructor(
 
     val liveData = MutableLiveData<String>()
 
+    val cases = noteCases
+
     private val _readAllNote = MutableStateFlow<List<NoteItem>>(listOf())
     var readAllNote = _readAllNote.asStateFlow()
 

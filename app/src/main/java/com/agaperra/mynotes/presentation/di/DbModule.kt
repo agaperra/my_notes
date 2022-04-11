@@ -20,7 +20,7 @@ object DbModule {
     @Provides
     fun provideDatabase(@ApplicationContext context: Context): NoteDatabase = Room
         .databaseBuilder(context, NoteDatabase::class.java, "note_database")
-        .addMigrations(Migrations.MigrationFrom8To9)
+        .fallbackToDestructiveMigration()
         .build()
 
     @Singleton

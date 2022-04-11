@@ -5,9 +5,10 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Note(
+        @PrimaryKey(autoGenerate = true)
+        var id: Int,
         var position: Int,
         var title: String?,
-        @PrimaryKey
         var edit_date: String,
         var create_date: String,
         var note: String?

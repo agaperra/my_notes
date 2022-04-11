@@ -1,10 +1,8 @@
 package com.agaperra.mynotes.data.repository
 
-import androidx.lifecycle.LiveData
 import com.agaperra.mynotes.data.db.entity.Note
 import com.agaperra.mynotes.data.db.dao.NoteDao
 import com.agaperra.mynotes.data.db.toDomain
-import com.agaperra.mynotes.domain.model.AppState
 import com.agaperra.mynotes.domain.repository.NoteRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -34,9 +32,12 @@ class NoteRepositoryImpl @Inject constructor(
         noteDao.update(title, create_date, edit_date, note)
     }
 
-//    fun updatePosition(position: Int, position_other: Int ){
-//        noteDao.updatePosition(position,position_other)
-//    }
+    override suspend fun updatePosition(position: Int, position_other: Int ){
+        noteDao.updatePosition(position,position_other)
+        noteDao.updateNextPosition()
+    }
 
     override suspend fun getCount(): Int = noteDao.getCount()
+
+    override suspend fun getMax(): Int? = noteDao.getMax()
 }
